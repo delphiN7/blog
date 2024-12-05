@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class = "row">
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+            <h3>Makaleler</h3>
+            <hr>
+            <form>
+                {% csrf_token %}
+                <input class="input-sm" type="text" name="keyword" placeholder="ara..." />
+                <button class="btn btn-danger" type="submit">Ara</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% if articles %}
+
+{% for article in articles %}
+<div class="container mt-5">
+            <div class="row">
+            <div class="col-md-10 offset-md-3">
+                <div class="col-lg-9">
+                </div>
+                
+
+
+                    <!-- Post content-->
+                    <div class="col-lg-9">
+
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4">
+                            <!-- Post title-->
+                            <a href="{% url 'article:detail' article.id %}"><h2 class="fw-bolder mb-1">{{article.title}}</h2></a> 
+                            <!-- Author -->
+                            <p class = "lead">
+                                
+                                {{article.author.username}} tarafından oluşturuldu
+                            </p>
+                            <hr>
+                            <!-- Post meta content-->
+                            <div class="text-muted fst-italic mb-2">{{article.created_date}}</div>
+                            <hr>
+                            
+                        </header>
+                        <!-- Preview image figure-->
+                        {% if article.article_image %}
+                            <a href="/articles/article/{{article.id}}"><img class="img-fluid rounded" src="{{article.article_image.url}}" alt=""></a>
+                        {% endif %}
+                        <!-- Post content-->
+                        <hr>
+                        <p class="lead">
+                            {{article.content|safe|truncatewords:60}}
+                        </p>
+
+                        <a style ="float : right" href="/articles/article/{{article.id}}" class="btn btn-danger">Devamını Oku</a>
+                        <hr>
+
+                    </article>
+                    <!-- Comments section-->
+                    <section class="mb-5">
+                    </section>                
+                </div>
+            </div>
+            </div>
+        </div>
+
+{% endfor %}
+
+{% else %}
+<div class = "row">
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+<div class = "alert alert-danger">
+    Makale Bulunamadı...
+</div>
+</div>
+</div>
+{% endif %}
+
+{% endblock body %}
